@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Parts List</title>
+</head>
+<body>
+    <H1>Car Parts</H1>
+    <form>
+        <label for="itemNameInput">Part Name: </label>
+        <input id="itemNameInput" type="text">
+
+        <label for="itemPriceInput">Price: </label>
+        <input id="itemPriceInput" type="number">
+
+        <button id="addItem" type="button">Add Item</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Part</th>
+                <th>Price</th>
+                <th>Bought</th>
+            </tr>
+        </thead>
+        <tbody id="tableItems">
+            
+        </tbody>
+    </table>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Need to Buy</th>
+                <th id="needToBuy"></th>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <th id="total"></th>
+            </tr>
+        </thead>
+    </table>
+
+    <script src="index.js"></script>
+</body>
+</html>
