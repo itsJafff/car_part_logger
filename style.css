@@ -1,0 +1,111 @@
+
+
+* {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #396cca;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    font-size: 50px;
+    text-align: center;
+}
+
+form {
+    font-size: 35px;
+    background-color: #174996;
+    width: 700px;
+    height: 40px;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+input, label {
+    font-size: 33px;
+    background-color: #174996;
+    color: white;
+}
+input {
+    width: 150px;
+    height: 30px;
+    background-color: #3881f0;
+    border: 2px solid white;
+    border-radius: 5px;
+    font-size: 20px;
+}
+#addItem {
+    width: 100px;
+    height: 40px;
+    background-color: #3881f0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+table {
+    padding: 20px;
+    border-collapse: separate;
+    border-spacing: 0px 5px;
+}
+
+th {
+    text-align: center;
+    width: 200px;
+    height: 50px;
+    padding: 20px;
+    background-color: #3881f0;
+    color: white;
+    font-size: 35px;
+}
+
+td {
+    text-align: center;
+    height: 50px;
+    padding: 20px;
+    background-color: #174996;
+    color: white;
+    font-size: 35px;
+}
+
+tr td:first-child, th:first-child{
+    border-radius: 10px 0 0 10px;
+}
+
+tr td:last-child, th:last-child{
+    border-radius: 0 10px 10px 0;
+}
+
+tr td:last-child{
+    border-radius: 0 10px 10px 0;
+    width: 50px;
+}
+
+
+#removeButton {
+    background-image: url('https://cdn-icons-png.flaticon.com/512/1214/1214428.png');
+    background-color: #174996;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-size: 70%;
+}
+
+#removeButton:hover {
+    background-color: #ff4d4d;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#boughtCheckbox {
+    width: 30px;
+    height: 30px;
+}

@@ -71,6 +71,7 @@ function updateTable() {
         let boughtCheckbox = document.createElement("input");
         boughtCheckbox.type = "checkbox";
         boughtCheckbox.checked = list[i].bought;
+        boughtCheckbox.id = "boughtCheckbox";
         boughtCheckbox.addEventListener("click", function() {
             if (list[i].bought == false) {
                 list[i].bought = true;
@@ -83,8 +84,8 @@ function updateTable() {
 
         let remove = document.createElement("td");
         let removeButton = document.createElement("button");
-        removeButton.textContent = "Remove";
         removeButton.type = "button";
+        removeButton.id = "removeButton";
         removeButton.addEventListener("click", function() {
             removeItem(list[i].itemName);
         });
