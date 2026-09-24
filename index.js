@@ -1,67 +1,140 @@
-const table = document.getElementById("tableItems");
+let list = []
+
+window.addEventListener("DOMContentLoaded", async () => {
+    await loadItems();
+    updateTable();
+    updateTotal();
+});
+
 const addItemButton = document.getElementById("addItem");
-const needToBuyText = document.getElementById("needToBuy");
-const totalText = document.getElementById("total");
 
-addItemButton.addEventListener("click", addItem);
 
-function addItem() {
-    let itemName = document.getElementById("itemNameInput").value;
-    let itemPrice = document.getElementById("itemPriceInput").value;
+addItemButton.addEventListener("click", function() {
+    let name = document.getElementById("itemNameInput").value;
+    let price = Number(document.getElementById("itemPriceInput").value);
+    addItem(name, price);
+})
 
-    
-    if (itemPrice == "" || itemName == "") {
+class item {
+    constructor(itemName, itemPrice) {
+        this.itemName = itemName;
+        this.itemPrice = itemPrice;
+        this.bought = false;
+    }
+}
+
+function addItem(itemName, itemPrice) {
+    if (itemName == "" || itemPrice == "") {
         return;
     }
 
-    let newRow = document.createElement("tr");
-    let newItemName = document.createElement("td");
-    newItemName.textContent = itemName;
+    for (let i = 0; i < list.length; i++) {
+        if (list[i].itemName == itemName) {
+            return;
+        }
+    }
 
-    let newItemPrice = document.createElement("td");
-    newItemPrice.textContent = "$" + itemPrice;
 
-    let newItemBought = document.createElement("td");
-    let newItemBoughtCheckBox = document.createElement("input");
-    newItemBoughtCheckBox.type = "checkbox";
-    newItemBoughtCheckBox.addEventListener("click", updateTotals)
-
-    let newRemove = document.createElement("td");
-    let newRemoveButton = document.createElement("button");
-    newRemoveButton.type = "button";
-    newRemoveButton.textContent = "Remove";
-    newRemoveButton.addEventListener("click", function () {
-        newRow.remove()
-        updateTotals()
-    })
-
-    newRow.append(newItemName);
-    newRow.append(newItemPrice);
-    newItemBought.append(newItemBoughtCheckBox);
-    newRow.append(newItemBought);
-    newRemove.append(newRemoveButton);
-    newRow.append(newRemove);
-
-    table.append(newRow);
-
-    updateTotals()
+    let newItem = new item(itemName, itemPrice);
+    list.push(newItem);
+    updateTable();
+    saveItems();
+    updateTotal();
 }
 
-function updateTotals() {
-    let rows = table.querySelectorAll("tr");
+function removeItem(itemName) {
+    for (let i = 0; i < list.length; i++) {
+        if (list[i].itemName == itemName) {
+            list.splice(i, 1);
+            updateTable();
+            saveItems();
+            updateTotal();
+            return;
+        }
+    }
+}
+
+function updateTable() {
+    let table = document.getElementById("tableItems");
+    table.replaceChildren();
+
+    for (let i = 0; i < list.length; i++) {
+        let row = document.createElement("tr");
+
+        let name = document.createElement("td");
+        name.textContent = list[i].itemName;
+
+        let price = document.createElement("td");
+        price.textContent = "$"+list[i].itemPrice;
+
+        let bought = document.createElement("td");
+        let boughtCheckbox = document.createElement("input");
+        boughtCheckbox.type = "checkbox";
+        boughtCheckbox.checked = list[i].bought;
+        boughtCheckbox.addEventListener("click", function() {
+            if (list[i].bought == false) {
+                list[i].bought = true;
+            }
+            else if (list[i].bought == true) {
+                list[i].bought = false;
+            }
+            updateTotal();
+        })
+
+        let remove = document.createElement("td");
+        let removeButton = document.createElement("button");
+        removeButton.textContent = "Remove";
+        removeButton.type = "button";
+        removeButton.addEventListener("click", function() {
+            removeItem(list[i].itemName);
+        });
+
+        bought.append(boughtCheckbox);
+        remove.append(removeButton);
+        row.append(name, price, bought, remove);
+        table.append(row);
+    }
+}
+
+function updateTotal() {
+    let totalElement = document.getElementById("total");
+    let needToBuyElement = document.getElementById("needToBuy");
 
     let total = 0;
-    let buyTotal = 0;
-    for (let i = 0; i < rows.length; i++) {
-        let price = rows[i].querySelectorAll("td")[1].innerText;
-        price = Number(price.replace(/\D/g, ""));
-        total += price;
+    let needToBuy = 0;
 
-        let checkbox = rows[i].querySelectorAll("td")[2].querySelector("input");
-        if (checkbox.checked == false) {
-            buyTotal += price;
+    for (let i = 0; i < list.length; i++) {
+        total += list[i].itemPrice;
+        if (list[i].bought == false) {
+            needToBuy += list[i].itemPrice;
         }
-    }    
-    totalText.textContent = "$"+total;
-    needToBuyText.textContent = "$"+buyTotal;
+    }
+
+    totalElement.textContent = "$"+total;
+    needToBuyElement.textContent = "$"+needToBuy;
+}
+
+async function saveItems() {
+    await fetch(
+        "https://car-part-logger-default-rtdb.firebaseio.com/items.json",
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(list)
+        }
+    );
+}
+
+async function loadItems() {
+    const response = await fetch(
+        "https://car-part-logger-default-rtdb.firebaseio.com/items.json"
+    );
+
+    const data = await response.json();
+
+    list = data || [];
+
+    console.log(list);
 }
